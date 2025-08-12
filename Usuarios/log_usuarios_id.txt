@@ -1,0 +1,8 @@
+Nombre: Luisito | Apellido: Aguilar | Edad: 21 | ID: 422
+Nombre: Luis | Apellido: Aguilar | Edad: 21 | ID: 41
+Nombre: Eduardo | Apellido: Aguialr | Edad: 21 | ID: 579
+Nombre: Rocko | Apellido: Heore | Edad: 5 | ID: 140
+Nombre: Luis | Apellido: Alejanfdro | Edad: 21 | ID: 263
+Nombre: Luis | Apellido: Aguilar | Edad: 21 | ID: 75
+Nombre: Eduard | Apellido: Soberanes | Edad: 24 | ID: 954
+Nombre: Lissandro | Apellido: Aguilar | Edad: 21 | ID: 162
