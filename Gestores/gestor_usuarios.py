@@ -1,12 +1,16 @@
 import sqlite3
 from utils import generar_id
 from pathlib import Path
-
-ruta_usuario = Path("/home/lissandro/Python_Repox/Gestor de Libreria/Usuarios/log_usuarios_id.txt")
+import time
+from os import system
+ruta_usuario = Path("/home/lissandro/Escritorio/Gestor de Librerias/extra/GestorGeneral.db")
 if ruta_usuario.exists():
-    print("La ruta si existe")
+    print(f"Ruta OK...")
+    time.sleep(2)
+    system("clear")
 else:
     print("No existe la ruta")
+
 class Usuario:
     """Clase para definir la estructura de cada usuario"""
     def __init__(self, nombre, apellido, edad, user_id):
@@ -24,20 +28,20 @@ class Usuario:
         ...
 
     def ingresar_usuario_DB(self):
-       """
+        """
         Funcion para manejar el ingreso de usuarios a una base de datos
         utilizando el with para no tener que cerrar manualment
         que eso normalmente cuausa errores si la apertura no
         funciona
-       """
-       try:
-         with sqlite3.connect("/home/lissandro/Python_Repox/Gestor de Libreria/Usuarios/Usuarios.db") as conn:
-            cur = conn.cursor()
-            cur.execute("CREATE TABLE IF NOT EXISTS Usuariodb(nombre,apellido,edad,user_id)")
-            cur.execute("INSERT INTO Usuariodb(nombre,apellido,edad,user_id) VALUES (?,?,?,?)", (self.nombre, self.apellido, self.edad, self.user_id))
-            conn.commit()
-       except sqlite3.Error as error:
-            print("Ha ocurrido un error =>", error)
+        """
+        try:
+            with sqlite3.connect(ruta_usuario) as conn:
+                cur = conn.cursor()
+                cur.execute("CREATE TABLE IF NOT EXISTS Usuario(user_id,Nombre,Apellido,Edad)")
+                cur.execute("INSERT INTO Usuario(user_id,Nombre,Apellido,Edad) VALUES (?,?,?,?)", (self.user_id, self.nombre, self.apellido, self.edad))
+                conn.commit()
+        except sqlite3.Error as error:
+            print("Ha ocurrido un error => ", error)
 # Declarar variables para poder colocar rangos de edad.
 #  Getter
 @property
@@ -47,7 +51,7 @@ def nombre(self):
 @nombre.setter
 def nombre(self, nombre):
     if nombre == "":
-        raise ValueError("debes ingresar un nombre")
+        raise ValueError("Debes ingresar un nombre")
     else:
         self._nombre = nombre
 
@@ -58,7 +62,7 @@ def apellido(self):
 @apellido.setter
 def apellido(self, apellido):
     if apellido == "":
-        raise ValueError("debes ingresar un apellido")
+        raise ValueError("Debes ingresar un apellido")
     else:
         self._apellido = apellido
 
@@ -74,12 +78,11 @@ def edad(self, edad):
             self._edad = edad
 
 
-def ingresar_usuario(nombre, apellido, edad):
-    userid = generar_id()
+def ingresar_usuario(userid,nombre, apellido, edad):
     genericuser = Usuario(nombre, apellido, edad, userid)
     if isinstance(genericuser, Usuario):
         genericuser.ingresar_usuario_DB()
-        print("Usuario creado con exito")
+        print("Usuario creado con exito.")
         try:
             with open(ruta_usuario, "a") as user_log:
                 user_log.writelines(f"Nombre: {nombre} | Apellido: {apellido} | Edad: {edad} | ID: {userid}\n")
@@ -91,6 +94,7 @@ def buscar_usuario():
 
 
 def listar_usuarios():
+
     ...
 
 #  Usar map() para mostrar títulos en mayúscula
