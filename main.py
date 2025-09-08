@@ -124,7 +124,7 @@ def prestamo_libro():
 								print("Quieres llevarte alguno de los libro mostrados? ")
 								presLibro = input(" >> ")
 								if presLibro == 'si':
-									print("Ingresa su nombre del libro")
+									print("Ingresa el titulo del libro:")
 									nomLibro = input(" >> ")
 									prestar_libro(1,nomLibro,nombre,apellido)
 							else:
@@ -133,7 +133,7 @@ def prestamo_libro():
 							system("clear")
 							nl = input("Titulo: ")
 							if bl(2,nl) == "correcto":
-								print("Quieres llevarte alguno de los libro mostrados? ")
+								print("Deseas llevarte alguno? ")
 								presLibro = input(" >> ")
 								if presLibro == 'si':
 									print("Ingresa su nombre del libro")
@@ -182,7 +182,7 @@ def BusquedaDeLibro():
 			if bl(1,atg) == "correcto":
 				print("=============================")
 			else:
-				print("No existe un autor con ese nombre")
+				print("No existe un autor con ese nombre.")
 		elif busqueda == 2:
 			system("clear")
 			print("Titulo: ")
@@ -190,14 +190,14 @@ def BusquedaDeLibro():
 			if bl(2,atg) == "correcto":
 				print("=============================")
 			else:
-				print("No existe un libro con ese titulo")
+				print("No existe un libro con ese titulo.")
 		elif busqueda == 3:
 			print("Ingresa el genero del Libro:")
 			gdl = input(" >> ")
 			if bl(3,gdl) == "correcto":
 				print("=============================")
 			else:
-				print("Asegurate de habber escrito bien el genero")
+				print("Asegurate de habber escrito bien el genero.")
 		elif busqueda == 4:
 			print("Ingresa el ISBN del Libro:")
 			gdl = input(" >> ")
@@ -211,7 +211,7 @@ def BusquedaDeLibro():
 			if bl(5,gdl) == "correcto":
 				print("=============================")
 			else:
-				print("No hay ningun Libro relacionado con el id proporcionado")
+				print("No hay ningun Libro relacionado con el id proporcionado.")
 	except ValueError:
 		print("Hay un error")
 
