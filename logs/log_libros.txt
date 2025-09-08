@@ -30,3 +30,8 @@ Titulo: Enciclopedia de Carlitos | Autor: Charlie Brown | Fecha: 19-03-1999 | IS
 Titulo: Harry Potter y la orden del fenix | Autor: JK Rowling | Fecha: 01-01-1999 | ISBN: 978-876-749-498-4 | Editorial: Parrua
 Titulo: Los Juegos del Hambre | Autor: Suzanne Collins | Fecha: 14-08-2008 | ISBN: 978-626-75-379-6 | Editorial: Scholastic
 Titulo: El viejo y el mar | Autor: Ernest hemingway | Fecha: 01-09-1952 | ISBN: 978-867-102-785-2 | Editorial: coquito
+Titulo: La victoria del comunismop | Autor: Stalin | Fecha: 10-11-1990 | ISBN: 978-311-21-770-4 | Editorial: befree
+Titulo: Linear Algebra Done Rigth | Autor: Sheldon Axler | Fecha: 09-10-2015 | ISBN: 978-574-477-978-1 | Editorial: PEARSON
+Titulo: El Libro de sofia | Autor: Jostein Gaarder | Fecha: 05-05-1991 | ISBN: 978-580-10-2-4 | Editorial: Socrates
+Titulo: Cosmos | Autor: Carl Sagan | Fecha: 12-09-1980 | ISBN: 978-423-986-737-9 | Editorial: saphiro
+Titulo: Deep Work | Autor: Cal Newport | Fecha: 08-06-2016 | ISBN: 978-543-319-118-5 | Editorial: Sarturn

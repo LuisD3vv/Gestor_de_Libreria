@@ -7,34 +7,14 @@ from datetime import datetime
 
 #  No usar mkdir cuando la ruta termine en un archivo, de lo contrario daria un error.
 #  Al utilizar Path se convierte en un objeto path
-rutaGen = Path("/home/lissandro/Escritorio/Gestor de Librerias/extra/GestorGeneral.db")
+rutaGen = Path("sql/GestorGeneral.db")
 ruta_escritura = Path("/home/lissandro/Escritorio/Gestor de Librerias/logs/log_libros.txt")
-# es un directorio
-"""
-def puta_ruta():
-	try:
-		if rutaGen.exists():
-			print("Ruta existente \U0001F54A.")
-	except FileNotFoundError:
-		print("Carpeta no encontrada")
-		rutaGen.mkdir(parents=True, exist_ok=True)
-		# si alguna carpeta del camino no existe se crea con parents = true, y con exist, si el archhivo
-		# ya existe no se lanza error
-		time.sleep(2)
-		print("Creando carpeta...")
-		time.sleep(2)
-		print("Carpeta creada con exito")
-	archivo = rutaGen / "Libros.txt"
-	archivo.touch(exist_ok=True) # crear un archivo vacio
-	return archivo
-"""
 class Libro:
 	"""
-		Clase en la que definimos la estructura de cada libro
-		De esta forma le decimos a python que es un libro y 
-		como debe comportarse
+	Clase en la que definimos la estructura de cada libro
+	De esta forma le decimos a python que es un libro y 
+	como debe comportarse.
 	"""
-
 	def __init__(self, titulo, autor, fecha, isbn, genero, editorial):
 		self.titulo = titulo
 		self.autor = autor
@@ -62,7 +42,6 @@ class Libro:
 				conn.commit()
 		except sqlite3.Error as error:
 			print(f"Ha ocurrido un error en alguna parte => {error}")
-	
 	
 	#  Property es para obtener los datos almacenados en la variable y regresarlo de manera oculta, tambien es una forma diferente de la habitual al getter.
 	@property
@@ -101,7 +80,6 @@ class Libro:
 		else:
 			self.detalles["fecha"] = fecha_nueva
 
-		
 def agregar_libro(titulo, autor, fecha, genero, editorial):
 	"""Comprobar las entradas del usuario y agregar correctamente el libro"""
 
@@ -118,7 +96,7 @@ def agregar_libro(titulo, autor, fecha, genero, editorial):
 	objeto = Libro(titulo=titulo_libro, autor=autor_libro, **detalle)
 	# el asterico en detalle, es un desempaquetado especial de diccionario clave, valor, si donde queremos sobreescribir los mismos datos, se nombraran como tal
 	# es decir, se acoplaran solos a los elementos disponibles
-	if isinstance(objeto, Libro):
+	if isinstance(objeto, Libro): #  verificamos que el libro nuevo sea un objeto de la clase libro
 		objeto.ingresar_libro_DB(rutaGen)  # si el objeto se creo, se ingresa a la database
 		with open(ruta_escritura, "a") as lerbo:
 			try:
@@ -147,7 +125,6 @@ def mostrar_libros():
 	except sqlite3.Error as error:
 		print("Ha ocurrido un error en alguna parte => ", error)
 
-
 def buscar_libro(opcion,param):
 	limpio = param.strip()
 	try:
@@ -155,7 +132,8 @@ def buscar_libro(opcion,param):
 			cur = con.cursor()
 		if opcion == 1:
 			#  no podemos sustituir columnas de sql con el ?, colamente nos queda usarlo en el where, para asi evitar inyeccion sql
-			cur.execute("SELECT * FROM Libro WHERE Autor = ?", (limpio,))
+			#  cada busqueda es independiete segun el parametro. por eso el multiple res
+			cur.execute("SELECT * FROM Libro WHERE Autor like ?", (limpio,))
 			res = cur.fetchone()
 			if res:
 				(_,Titulo,Autor,Fecha,Genero,_,_) = res
@@ -164,23 +142,27 @@ def buscar_libro(opcion,param):
 				print(f"TItulo: {Titulo} | Autor: {Autor} | Fecha de Lanzamiento: {Fecha} | Genero: {Genero}")
 				return "correcto"
 		elif opcion == 2:
-			cur.execute("SELECT * FROM Libro WHERE Titulo = ?", (limpio,))
-			(_,Titulo,Autor,Fecha,Genero,_,_) = res
-			system("clear")
-			print(f"Libros con el titulo {Autor} disponibles:")
-			print(f"TItulo: {Titulo} | Autor: {Autor} | Fecha de Lanzamiento: {Fecha} | Genero: {Genero}")
-			return "correcto"
-		elif opcion == 3:
-			cur.execute("SELECT * FROM Libro WHERE Genero = ?", (limpio,))
+			cur.execute("SELECT * FROM Libro WHERE Titulo like ?", (limpio,))
 			res = cur.fetchone()
 			if res:
 				(_,Titulo,Autor,Fecha,Genero,_,_) = res
 				system("clear")
-				print(f"Libros disponibles del genero '{limpio}':")
+				print(f"Libros con el titulo {Titulo}:")
 				print(f"TItulo: {Titulo} | Autor: {Autor} | Fecha de Lanzamiento: {Fecha} | Genero: {Genero}")
 				return "correcto"
+		elif opcion == 3:
+			cur.execute("SELECT Titulo,Autor FROM Libro WHERE Genero like ?", (limpio,))
+			res = cur.fetchall()
+			if res:
+				system("clear")
+				print(f"Libros disponibles del genero '{limpio}':\n")
+				for Genlibro in res:
+					(tit, aut) = Genlibro
+					print(f"Titulo: {tit} | Autor: {aut:<12}\n-------")
+					
+				return "correcto"
 		elif opcion == 4:
-			cur.execute("SELECT * FROM Libro WHERE ISBN = ?", (limpio,))
+			cur.execute("SELECT * FROM Libro WHERE ISBN like ?", (limpio,))
 			res = cur.fetchone()
 			if res:
 				(_,Titulo,Autor,Fecha,Genero,_,isbn) = res
@@ -189,7 +171,7 @@ def buscar_libro(opcion,param):
 				print(f"TItulo: {Titulo} | Autor: {Autor} | Fecha de Lanzamiento: {Fecha} | Genero: {Genero} | ISBN: {isbn}")
 				return "correcto"
 		elif opcion == 5:
-			cur.execute("SELECT * FROM Libro WHERE Libro_ID = ?", (limpio,))
+			cur.execute("SELECT * FROM Libro WHERE Libro_ID like ?", (limpio,))
 			res = cur.fetchone()
 			if res:
 				(_,Titulo,Autor,Fecha,Genero,_,isbn) = res

@@ -6,6 +6,11 @@ from Gestores.gestor_prestamos import prestar_libro, validadar_metodo
 from utils import generar_id
 from utils import malas_palabras
 from datetime import date
+from validaciones import *
+
+fecha = date.today()
+#  Formatear la fecha dia,mes y anno  
+fecha_hoy = fecha.strftime("%d-%m-%Y")
 
 """
 Es mucho mejor utilizar rutas absolutas, MUCHISMO, asi que a la hora de hacerlo portable
@@ -15,103 +20,6 @@ pero si utilizara rutas relativas desde otro lugar, daria error porque lo buscar
 esta este archivo
 """
 
-fecha = date.today()
-fecha_hoy = fecha.strftime("%d-%m-%Y")
-(dia_hoy, mes_hoy, anio_hoy) = fecha_hoy.split("-")
-
-
-#  print(dia_hoy,mes_hoy,anio_hoy)
-def validar_titulo(titulo):
-	if malas_palabras(titulo):
-		print('Hay palabras mal sonantes')
-		return "Titulo del libro con groserias"
-	if len(titulo) < 4:
-		return "Titulo muy corto"
-	else:
-		return "correcto"
-
-
-def validar_autor(autor):
-	if malas_palabras(autor):
-		print('Hay palabras mal sonantes')
-		return "Nombre del autor con groserias"
-	if len(autor) < 4:
-		return "Nombre del autor muy corto"
-	return "correcto"
-
-
-def validar_genero(genero):
-	if malas_palabras(genero):
-		print('Hay palabras mal sonantes')
-		return "Genero con groserias"
-	if len(genero) < 4:
-		return "Texto genero demaciado corto"
-	return "correcto"
-
-
-def validar_editorial(editorial):
-	if malas_palabras(editorial):
-		print('Hay palabras mal sonantes')
-		return "Editorial con groserias"
-	elif len(editorial) < 4:
-		return "Editorial muy corta"
-	return "correcto"
-
-
-def validar_fecha(fecha):
-	"""Validacion de fecha
-	Arereglar comparacion de fechas
-	y que solo aplique cuando el anio
-	total es mayor al de hoy,
-	individuamente si pueden ser mayores al dia de hoy
-	"""
-	while True:
-		try:
-			fecha_usuario = fecha.split("-")
-			(dia, mes, anio) = fecha_usuario
-			if int(anio) > int(anio_hoy):
-				print("El año no puede ser mayor al actual.")
-				return "año mayor"
-		except IndexError:
-			print("Valor fuera del rango")
-			return None
-		except ValueError:
-			print("No hay suficientes valores para la fecha.")
-			return None
-		else:
-			if len(anio) != 4:
-				print("El año debe de tener 4 digitos")
-				return "mal formato año"
-
-			elif len(mes) != 2:
-				print("El mes debe de tener 2 digitos  => [-12 > mes > 00-]")
-				return "mal formato mes"
-
-			elif len(dia) != 2:
-				print("El dia debe de tener 2 digitos")
-				return "mal formato dia"
-
-		return "correcto"
-
-
-def pedir_dato(mensaje, funcion_validadora):
-	"""
-	Funcion extra de agregar libros, la cual me ayuda a mantener todos los
-	campos de los ingresos de libro, y evitando que el codigo se cierre
-	cuadno hayun error, asi solamente regresa la funcion y el mensaje de
-	errorque la funcion nos dio.
-	"""
-	while True:
-		dato = input(mensaje)
-		if dato == "-1":
-			return None  # señal para salir
-		resultado = funcion_validadora(dato)
-		if resultado == "correcto":
-			return dato
-		else:
-			print(f"❌ {resultado}. Intenta de nuevo.")
-
-# Se modularizo el codigo para hacer más óptimo el codigo y poder probar cada parte por separado
 def agregar_libros():
 	print("Cargando...")
 	time.sleep(2)
@@ -140,80 +48,120 @@ def agregar_libros():
 		print("Todos los campos son correctos.")
 		return
 
-
 def registrar_usuario():
 	system("clear")
 	print("Hola, Bienvenido!\nTe pediremos alguno datos personales para continuar.")
 	nombre = input("Nombre(s): ")
 	apellido = input("Apellido(s): ")
-	edad = int(input("Edad: "))
+	while True:
+		edad = input("Edad >> ")
+		try:
+			edad = int(edad)
+			break
+		except:
+			print("Ingresa un numero")
 	userid = generar_id(nombre)
 	system("clear")
 	inguser(userid, nombre, apellido, edad)
-	print(f"Hola {nombre} tu id es [{userid}]\nAsegurate de anotarlo en un lugar seguro, con este id puede solicitar libros...")
+	print(f"Hola {nombre}, tu id es {userid}\nCon este id puedes solicitar libros existentes en el sistema.")
 	time.sleep(5)
 	system("clear")
 
-
 def prestamo_libro():
 	system("clear")
-	print("Para realizar un prestamo es necesario estar Registrado.")
+	print("Es necesario estar Registrado Para Solicitar un libro,\nsi no lo estas puedes registrarte en cualquier momento.")
 	print("Opciones para solicitar un Libro:\n1) ID\n2) Nombre\n3) DNI")
 	try:
-		opcion_prestamo = int(input(">> "))
+		opcion_prestamo = int(input(" >> "))
 		if opcion_prestamo == 1:
 			print("Ingresa tu id:")
-			temporal_id = input(">> ")
+			temporal_id = input(" >> ")
 			try:
 				if validadar_metodo(1, temporal_id) == "usuario existente":
-					print("Como deseas buscar el libro?\n1) Autor\n2) Titulo\n3) Genero\n4) ISBN")
-					opcion = input(">> ")
+					system("clear")
+					#  Segundo uso de la funcion  busqueda de libro
+					print("¿Como deseas buscar el libro?\n1) Autor\n2) Titulo\n3) Genero\n4) ISBN")
+					opcion = input(" >> ")
 					match opcion:
 						case '1':
+							system("clear")
 							nl = input("Autor: ")
-							bl(1,nl);
+							bl(1,nl)
 						case '2':
+							system("clear")
 							nl = input("Titulo: ")
-							bl(2,nl);
+							bl(2,nl)
 						case '3':
+							system("clear")
 							nl = input("Genero: ")
-							bl(3,nl);
+							if bl(3,nl) == "correcto":
+								print("culo")
 						case '4':	
+							system("clear")
 							nl = input("ISBN: ")
-							bl(4,nl);
+							bl(4,nl)
 				else:
+					system("clear")
 					print("El ID proporcionado no es correcto y/o no existe.")
 			except ValueError:
 				print("No se pudo registrar el prestamo")
 		elif opcion_prestamo == 2:
 			print("Ingresa lo siguiente a continuacion")
 			print("Primer Nombre:")
-			nombre = input(">> ")
+			nombre = input(" >> ")
 			print("Apellido Paterno:")
-			apellido = input(">> ")
+			apellido = input(" >> ")
 			try:
 				if validadar_metodo(2, nombre, apellido) == "usuario existente":
 					print("Como deseas buscar el libro?\n1) Autor\n2) Titulo\n3) Genero\n4) ISBN")
-					opcion = input(">> ")
+					opcion = input(" >> ")
 					match opcion:
 						case '1':
+							#  si es correcto, asumimos que el usuario existe y el libro tambien
+							system("clear")
 							nl = input("Autor: ")
 							if bl(1,nl) == "correcto":
-								# si existe el libro se hara el prestamo
-								prestamo_libro(nl)
+								print("Quieres llevarte alguno de los libro mostrados? ")
+								presLibro = input(" >> ")
+								if presLibro == 'si':
+									print("Ingresa su nombre del libro")
+									nomLibro = input(" >> ")
+									prestar_libro(1,nomLibro,nombre,apellido)
+							else:
+								print("hay un error en la funcion")
 						case '2':
+							system("clear")
 							nl = input("Titulo: ")
-							bl(2,nl);
+							if bl(2,nl) == "correcto":
+								print("Quieres llevarte alguno de los libro mostrados? ")
+								presLibro = input(" >> ")
+								if presLibro == 'si':
+									print("Ingresa su nombre del libro")
+									nomLibro = input(" >> ")
+									prestar_libro(2,nomLibro,nombre,apellido)
+							else:
+								print("Hay un error en la funcion")
 						case '3':
+							system("clear")
 							nl = input("Genero: ")
-							bl(3,nl);
-						case '4':	
+							if bl(3,nl) == "correcto":
+								print("Te interesa algun libro mostrado?")
+								presLibro = input(" >> ")
+								if presLibro == 'si':
+									print("Ingresa su nombre del libro")
+									nomLibro = input(" >> ")
+									prestar_libro(2,nomLibro,nombre,apellido)
+							else:
+								print("hay un error en la funcion")
+						case '4':
+							system("clear")
 							nl = input("ISBN: ")
 							bl(4,nl);
 				else:
+					system("clear")
 					print("El Usuario no existe y/o no esta registrado")
-			except ValueError:
-				print("No se pudo registrar el prestamo")
+			except ValueError as e:
+				print("No se pudo registrar el prestamo {}".format(e))
 	except ValueError:
 		system("clear")
 		print("La opcion debe ser ingresada con un numero.")
@@ -221,46 +169,51 @@ def prestamo_libro():
 def mostrar_libros_disponibles():
 	mostrar_libros()
 
-
 def BusquedaDeLibro():
 	"""Buscar por nombre, autor y género"""
 	system("clear")
-	print("Buscar Libro por\n• 1) Autor\n• 2) Titulo\n• 3) Genero\n• 4) ID")
+	print("Buscar Libro por\n• 1) Autor\n• 2) Titulo\n• 3) Genero\n• 4) ISBN\n• 5) ID")
 	try:
-		busqueda = int(input(">> "))
+		busqueda = int(input(" >> "))
 		if busqueda == 1:
 			system("clear")
 			print("Ingresa el nombre del Autor:")
-			atg = input("=> ")
+			atg = input(" => ")
 			if bl(1,atg) == "correcto":
 				print("=============================")
 			else:
-				print("El dato proporcionado no es correcto")
+				print("No existe un autor con ese nombre")
 		elif busqueda == 2:
 			system("clear")
 			print("Titulo: ")
-			atg = input("=> ")
+			atg = input(" => ")
 			if bl(2,atg) == "correcto":
 				print("=============================")
 			else:
-				print("El dato proporcionado no es correcto")
+				print("No existe un libro con ese titulo")
 		elif busqueda == 3:
 			print("Ingresa el genero del Libro:")
-			gdl = input(">> ")
+			gdl = input(" >> ")
 			if bl(3,gdl) == "correcto":
 				print("=============================")
 			else:
-				print("El dato proporcionado no es correcto")
+				print("Asegurate de habber escrito bien el genero")
 		elif busqueda == 4:
-			print("Ingresa el ID del Libro:")
-			gdl = input(">> ")
+			print("Ingresa el ISBN del Libro:")
+			gdl = input(" >> ")
 			if bl(5,gdl) == "correcto":
 				print("=============================")
 			else:
-				print("El dato proporcionado no es correcto")
+				print("El ISBN esta bien escrito?")
+		elif busqueda == 5:
+			print("Ingresa el ID corresponiente al Libro.")
+			gdl = input(" >> ")
+			if bl(5,gdl) == "correcto":
+				print("=============================")
+			else:
+				print("No hay ningun Libro relacionado con el id proporcionado")
 	except ValueError:
 		print("Hay un error")
-
 
 def admon():
 	print("Limpiando consola...")
@@ -268,27 +221,29 @@ def admon():
 	system("clear")
 
 print("Cargando...")
+print("Sistema operado por WestCO todos los derechos reservados(2025)")
 time.sleep(3)
 print("Listo!")
 #   Interfaz base del codigo
 def main():
 	system("clear")
-	while True:  # Sistema de gestion internacional de biblioteca
-		print("Sistema de Gestion `Alejandria`")
+	while True: 
+		print("Automated System NetCore Dreamer[S.A.N.D]")
 		print("=============================")
 		print(
-			"• 1) Agregar un Libro 📚\n• 2) Registrar Usuario 🧑‍💻\n• 3) Solicitar Libro 🤲\n• 4) Libros Disponibles 📖\n• 5) Buscar Libro 🔍\n• 6) Salir🚪\n• 7) Limpiar Consola")
-		print("===========================")
+			"Opciones Disponibles:\n• 1) Agregar un Libro 📚\n• 2) Registrar Usuario 🧑‍💻\n• 3) Solicitar Libro 🤲\n• 4) Libros Disponibles 📖\n• 5) Buscar Libro 🔍\n• 6) Salir🚪\n• 7) Limpiar Consola\n• 8) (NUEVO) Recetas -->")
+		print("Terminos y garantias Limitadas.\n=============================")
 		while True:
 			try:
 				print("¿Que deseas realizar?")
 				opcion = input(">> ")
 				opcion = opcion.strip(" ")
-				if opcion == "nada":
+				if opcion == "nada" or opcion == "no":
+					print("Has salido.")
 					exit()
 			except ValueError as e:
 				system("clear")
-				print(f"Opcion entera incorrecta => error [=>{e}<=]")
+				print(f"Opcion incorrecta => {e}")
 			except KeyboardInterrupt:
 				print("Saliendo...")
 				break
@@ -307,6 +262,7 @@ def main():
 				BusquedaDeLibro()
 			case '6':
 				print(f"Hasta luego\nUltimo acceso => {fecha}")
+				print("Sistema operado bajo WesTek todos los derechos reservados")
 				time.sleep(2)
 				system("clear")
 				break

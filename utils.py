@@ -16,6 +16,7 @@ asi mismo formatear las impresiones
 """
 
 def creacion_isbn():
+	"""Solo si el usuario no desea poner el id real"""
 	Ean = 978
 	Country = randint(0, 998)
 	Editorial = randint(0, 998)
@@ -24,7 +25,6 @@ def creacion_isbn():
 	ISBN = str(Ean) + "-" + str(Country) + "-" + str(Editorial) + "-" + str(Publicacion_ID) + "-" + str(DigitoControl)
 	return ISBN
 
-
 def generar_id(name):
 	"""Con esta funcion crearemos un id unico"""
 	nombre_clean = name.strip(" ")
@@ -32,7 +32,6 @@ def generar_id(name):
 	n = randint(1, 999)
 	Gen_ID = f"{"".join(nom)}{n}"
 	return str(Gen_ID)
-
 
 def malas_palabras(palabra):
 	groserias = [
@@ -43,23 +42,3 @@ def malas_palabras(palabra):
 		return True
 	else:
 		return False
-
-
-def verificarIndentidad():
-
-	return
-
-def idArtifcial():
-	n = 0
-	while True:
-		yield n
-		n += 1
-
-#------------------------------------------------
-
-def admon():
-	"""
-	No es la gran cosa
-	es solamente para modificar
-	elementos comunes y faciles	
-	"""

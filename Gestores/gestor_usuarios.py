@@ -3,7 +3,7 @@ from utils import generar_id
 from pathlib import Path
 import time
 from os import system
-ruta_usuario = Path("/home/lissandro/Escritorio/Gestor de Librerias/extra/GestorGeneral.db")
+ruta_usuario = Path("sql/GestorGeneral.db")
 if ruta_usuario.exists():
     print(f"Ruta OK...")
     time.sleep(2)
