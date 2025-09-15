@@ -1,6 +1,5 @@
 Diseño general  
 
-
 >**NO OLVIDAR REPASAR EJERCICIOS Y TEMAS VISTOS, DOCUMENTACION, PRACTICAR, USAR HERRRAMIENTAS, INTENTRALO, PROBAR, EQUIVOCARSE, APRENDER, TODO ES PARTE.**
 #
 >biblioteca/
@@ -13,16 +12,6 @@ Diseño general
 │   ├── test_libros.py
 │   ├── test_usuarios.py
 │   └── test_prestamos.py
-
-Lo que se pondra a prueba
-
- POO (clases y objetos) setter y getter
-
-✅ Manejo de listas, diccionarios y sets
-
-✅ Funciones de orden superior (map, filter, lambda)
-
-✅ Manejo de errores
 
 ✅ unittest para probar lógica de negocio
 
@@ -72,45 +61,7 @@ Lo que se pondra a prueba
     ¿El préstamo no se puede duplicar?
 
     ¿Un usuario inexistente no puede pedir un libro?
-#
->Interfaz esperada 
 
-1. Agregar libro
-2. Registrar usuario
-3. Prestar libro
-4. Listar libros
-5. Buscar libro
-6. Salir
-#
->Acomodo de secciones
-
-# Clase Libro: título, autor, año, ISBN
-# Lista de libros
-# Funciones:
-# - agregar_libro()
-# - buscar_por_titulo()
-# - buscar_por_autor()
-# - listar_libros()
-#
->🧍 gestor_usuarios.py
-
-# Clase Usuario: nombre, ID único
-# Lista de usuarios
-# Funciones:
-# - registrar_usuario()
-# - buscar_usuario()
-# - listar_usuarios()
-#
->🔄 gestor_prestamos.py
-
-# Clase Prestamo: usuario, libro
-# Lista de préstamos
-# Funciones:
-# - prestar_libro()
-# - devolver_libro()
-# - ver_prestamos()
-# Validación: no prestar si ya está prestado
-#
 >🔧 utils.py
 
 # Funciones comunes
@@ -148,3 +99,7 @@ class TestLibro(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+# Crear una rama en cada dispositivo para practicar merge y evitar estar descargando el mismo documento en cada computadora.
+>De esta manera evitamos redundancia entre hacer lo mismo y asi nos podemos enfocar en diferentes secciones

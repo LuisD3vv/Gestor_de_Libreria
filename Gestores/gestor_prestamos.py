@@ -2,6 +2,7 @@ from datetime import datetime
 import sqlite3
 from pathlib import Path
 from os import system
+from time import sleep
 
 hoy = datetime.now().strftime("%d-%m-%Y")
 
@@ -44,22 +45,22 @@ def validadar_metodo(*args):
 	return None
 
 def verificarEstadoPrestamo(libro_id):
-	print(libro_id)
 	try:
 		with sqlite3.connect(ruta_db) as con:
 			cur = con.cursor()
-			cur.execute("select prestado from Prestamo where Libro_id = ?",(libro_id,))
+			cur.execute("SELECT prestado FROM Prestamo WHERE Libro_id = ?",(libro_id,))
 			estado = cur.fetchone()
 			print("DEBUG estado:", estado, "->", type(estado)) # nos ayuda a saber que regresa una consulta
-			if estado[0] == 1:
-				return True
-			elif estado == None:
-				print("No hubo resultado en la busqueda")
-	except TypeError as t:
-		print(f"Error de nonetype, un error en la consulta {t}")
+			if estado == None:
+				print("no hubo ningun resultado")
+				return False
+			else:
+				#  compresion de logica de true y false
+				estadoLimpio = estado[0]
+				return estadoLimpio == 1
 	except sqlite3.Error as e:
 		print(f"Ha ocurrido un error {e}")
-	return False
+	
 
 def prestar_libro(busqueda,libro,*args):
 	"""
@@ -90,42 +91,51 @@ def prestar_libro(busqueda,libro,*args):
 				case 4:
 					columna = "ISBN"
 				case _:
-					raise ValueError("tipo de busqueda invalido")
+					raise ValueError("Tipo de busqueda invalido")
 
-			cur.execute(f"SELECT Libro_ID FROM Libro where {columna} = ? ", (libroLimpio,))
+			cur.execute(f"SELECT Libro_ID FROM Libro where Libro.{columna} LIKE ? ", (libroLimpio,))
 			lid = cur.fetchone()
 			cur.execute("SELECT User_id FROM Usuario WHERE Nombre LIKE ? and Apellido LIKE ? ",(f"%{nombre}%", f"%{apellido}%"))
 			usid = cur.fetchone()
+			print("DEBUG Libro_ID:", lid, "->", type(lid)) # nos ayuda a saber que regresa una consulta
+			print("DEBUG User_ID:", usid, "->", type(usid)) # nos ayuda a saber que regresa una consulta
 
-			#  Esto  daria un error al igresar el id del libro
-			#  sacando el valor de la tupla (nombre,)
-			Libro_id = lid[0]
-			Usuario_id = usid[0]
-			if verificarEstadoPrestamo(Libro_id):
-					print("Este libro ya esta prestado\nporfavor selecciona otro.")
-			else:
-				# utilizamos esto para extraer el valor, ya que al ser una tupla con un solo valor lleva una coma (5,)
-				cur.execute("""
+			# Limpiamos la tupla que nos regreso la consulta (n,)
+			libroid = lid[0]
+			userid = usid[0]
+
+			
+			print(f"Datos limpios => {libroid}, {userid}")
+			sleep(2)
+			system("clear")
+
+			while True:
+				if verificarEstadoPrestamo(libroid):
+					print("El Libro seleccionado se encuentra en prestamo en este momento.\n¿deseas solicitar algun otro?")
+					break
+				else:
+					#  Creamos la tabla en caso de no existir, lo cual puede suceder pero lo optimo seria que existiera para mantener congruencia con los prestamos
+					print("Realizando prestamo...")
+					sleep(2)
+					system("clear")
+					cur.execute("""
 					CREATE TABLE IF NOT EXISTS Prestamo (
 					Libro_ID INTEGER,
 					Usuario_id INTEGER,
 					FechaPrestamo TEXT,
-					prestado BOOLEAN
-				)
-				""")
-				cur.execute("CREATE IF NOT EXISTS INSERT INTO Prestamo (Libro_ID,Usuario_id,FechaPrestamo,prestado) VALUES (?,?,?,?)", (Libro_id, Usuario_id, hoy, True))
-				con.commit()
-				try:
-					with open('logs/log_prestamos.txt') as log:
-						log.writelines(f"Libro ID: {Libro_id}| User: {Usuario_id}| FechaP: {hoy}| Prestado: {1}\n")
+					prestado BOOLEAN)""")
+					cur.execute("CREATE IF NOT EXISTS INSERT INTO Prestamo (Libro_ID,Usuario_id,FechaPrestamo,prestado) VALUES (?,?,?,?)", (libroid, userid, hoy, True))
+					con.commit()
+					print("El prestamo se realizo correctamente. tienes 3 meses.")
+					try:
+						with open('logs/log_prestamos.txt') as log:
+							log.writelines(f"Libro ID: {libroid}| User: {userid} id | FechaP: {hoy}| Prestado: {1}\n")
 						print("Prestamo guardado en log")
-				except FileNotFoundError:
-						print("Asegurate de que el archivo exista o la ruta este bien escrita")
-
-				system("clear")
-				print("El prestamo se realizo correctamente. tienes 3 meses.")
-			
-			print(f"Usuario o Libro no encontrados {Libro_id} {Usuario_id}")
+					except FileNotFoundError:
+						print("Asegurate de que el archivo exista o la ruta es te bien escrita")
+					else:
+						system("clear")
+						print(f"Usuario o Libro no encontrados {lid} {usid}")                                                                             
 	except sqlite3.Error as e:
 		print("hay un puto pinche error {}".format(e))
 	except ValueError as f:

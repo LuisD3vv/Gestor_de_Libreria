@@ -69,8 +69,8 @@ def registrar_usuario():
 
 def prestamo_libro():
 	system("clear")
-	print("Es necesario estar Registrado Para Solicitar un libro,\nsi no lo estas puedes registrarte en cualquier momento.")
-	print("Opciones para solicitar un Libro:\n1) ID\n2) Nombre\n3) DNI")
+	print("Es necesario estar Registrado Para Solicitar un libro,\nsi no lo estas, puedes registrarte en cualquier momento en el menu.")
+	print("Opciones disponibles para solicitar un Libro:\n• 1) ID\n• 2) Nombre\n• 3) -DNI(decraped)")
 	try:
 		opcion_prestamo = int(input(" >> "))
 		if opcion_prestamo == 1:
@@ -80,7 +80,7 @@ def prestamo_libro():
 				if validadar_metodo(1, temporal_id) == "usuario existente":
 					system("clear")
 					#  Segundo uso de la funcion  busqueda de libro
-					print("¿Como deseas buscar el libro?\n1) Autor\n2) Titulo\n3) Genero\n4) ISBN")
+					print("¿Como deseas buscar el libro?\n• 1) Autor\n• 2) Titulo\n• 3) Genero\n• 4) ISBN")
 					opcion = input(" >> ")
 					match opcion:
 						case '1':
@@ -113,7 +113,7 @@ def prestamo_libro():
 			apellido = input(" >> ")
 			try:
 				if validadar_metodo(2, nombre, apellido) == "usuario existente":
-					print("Como deseas buscar el libro?\n1) Autor\n2) Titulo\n3) Genero\n4) ISBN")
+					print("¿Como deseas buscar el libro?\n1) Autor\n2) Titulo\n3) Genero\n4) ISBN")
 					opcion = input(" >> ")
 					match opcion:
 						case '1':
@@ -121,38 +121,41 @@ def prestamo_libro():
 							system("clear")
 							nl = input("Autor: ")
 							if bl(1,nl) == "correcto":
-								print("Quieres llevarte alguno de los libro mostrados? ")
+								print("¿Quieres llevarte alguno de los libro mostrados? ")
 								presLibro = input(" >> ")
 								if presLibro == 'si':
 									print("Ingresa el titulo del libro:")
 									nomLibro = input(" >> ")
 									prestar_libro(1,nomLibro,nombre,apellido)
 							else:
-								print("hay un error en la funcion")
+								print("hay un error en la Funcion")
 						case '2':
 							system("clear")
 							nl = input("Titulo: ")
 							if bl(2,nl) == "correcto":
-								print("Deseas llevarte alguno? ")
+								print("¿Deseas llevarte alguno? ")
 								presLibro = input(" >> ")
 								if presLibro == 'si':
-									print("Ingresa su nombre del libro")
+									print("Ingresa el titulo del libro")
 									nomLibro = input(" >> ")
 									prestar_libro(2,nomLibro,nombre,apellido)
 							else:
-								print("Hay un error en la funcion")
+								print("Hay un error en la Funcion")
 						case '3':
 							system("clear")
 							nl = input("Genero: ")
 							if bl(3,nl) == "correcto":
-								print("Te interesa algun libro mostrado?")
+								print("¿Te interesa algun libro de los mostrado? (si-no)")
 								presLibro = input(" >> ")
 								if presLibro == 'si':
 									print("Ingresa su nombre del libro")
 									nomLibro = input(" >> ")
-									prestar_libro(2,nomLibro,nombre,apellido)
+									try:
+										prestar_libro(2,nomLibro,nombre,apellido)
+									except TypeError:
+										print("Porfavor Selecciona una opcion valida.")
 							else:
-								print("hay un error en la funcion")
+								print("hay un error en la Funcion")
 						case '4':
 							system("clear")
 							nl = input("ISBN: ")
@@ -182,7 +185,7 @@ def BusquedaDeLibro():
 			if bl(1,atg) == "correcto":
 				print("=============================")
 			else:
-				print("No existe un autor con ese nombre.")
+				print(f"No existe un Autor con ese nombre {atg}.")
 		elif busqueda == 2:
 			system("clear")
 			print("Titulo: ")
@@ -190,28 +193,28 @@ def BusquedaDeLibro():
 			if bl(2,atg) == "correcto":
 				print("=============================")
 			else:
-				print("No existe un libro con ese titulo.")
+				print(f"No existe un libro con ese titulo {atg}.")
 		elif busqueda == 3:
 			print("Ingresa el genero del Libro:")
-			gdl = input(" >> ")
-			if bl(3,gdl) == "correcto":
+			atg = input(" >> ")
+			if bl(3,atg) == "correcto":
 				print("=============================")
 			else:
-				print("Asegurate de habber escrito bien el genero.")
+				print(f"Asegurate de habber escrito bien el genero {atg}.")
 		elif busqueda == 4:
 			print("Ingresa el ISBN del Libro:")
-			gdl = input(" >> ")
-			if bl(5,gdl) == "correcto":
+			atg = input(" >> ")
+			if bl(5,atg) == "correcto":
 				print("=============================")
 			else:
-				print("El ISBN esta bien escrito?")
+				print(f"¿El ISBN esta bien escrito?: {atg}")
 		elif busqueda == 5:
 			print("Ingresa el ID corresponiente al Libro.")
-			gdl = input(" >> ")
-			if bl(5,gdl) == "correcto":
+			atg = input(" >> ")
+			if bl(5,atg) == "correcto":
 				print("=============================")
 			else:
-				print("No hay ningun Libro relacionado con el id proporcionado.")
+				print(f"No hay ningun Libro relacionado con el ID proporcionado => {atg}.")
 	except ValueError:
 		print("Hay un error")
 
@@ -221,18 +224,18 @@ def admon():
 	system("clear")
 
 print("Cargando...")
-print("Sistema operado por WestCO todos los derechos reservados(2025)")
+print("Sistema operado por RoXxon\nTodos los derechos reservados(2025)")
 time.sleep(3)
 print("Listo!")
 #   Interfaz base del codigo
 def main():
 	system("clear")
 	while True: 
-		print("Automated System NetCore Dreamer[S.A.N.D]")
+		print("Welcome back to\nAutomated Library Service Management System = > [A.L.S.M.S]")
 		print("=============================")
 		print(
 			"Opciones Disponibles:\n• 1) Agregar un Libro 📚\n• 2) Registrar Usuario 🧑‍💻\n• 3) Solicitar Libro 🤲\n• 4) Libros Disponibles 📖\n• 5) Buscar Libro 🔍\n• 6) Salir🚪\n• 7) Limpiar Consola\n• 8) (NUEVO) Recetas -->")
-		print("Terminos y garantias Limitadas.\n=============================")
+		print("Terminos y garantias Limitadas.\n===================================")
 		while True:
 			try:
 				print("¿Que deseas realizar?")
