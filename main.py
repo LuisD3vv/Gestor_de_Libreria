@@ -2,15 +2,22 @@ from os import system
 import time
 from Gestores.gestor_libros import agregar_libro as agl,mostrar_libros,buscar_libro as bl  # asi agregamos una funcion especifica
 from Gestores.gestor_usuarios import ingresar_usuario as inguser
-from Gestores.gestor_prestamos import prestar_libro, validadar_metodo
-from utils import generar_id
-from utils import malas_palabras
+from Gestores.gestor_prestamos import prestar_libro, validadar_metodo,devolver_libro,ver_prestamos
+from utils import generar_id,admon,malas_palabras,creacion_isbn
 from datetime import date
 from validaciones import *
+from os import name
+import sys
+from colorama import init, Fore,Back,Style
+
+# INICIAR COLORAMA
+init(autoreset=True)
+
 
 fecha = date.today()
 #  Formatear la fecha dia,mes y anno  
-fecha_hoy = fecha.strftime("%d-%m-%Y")
+fecha_hoy:str = fecha.strftime("%d-%m-%Y")
+# :str es un type hint para desarrolladores, como para tener mejor vision sobre lo que estamos tratando
 
 """
 Es mucho mejor utilizar rutas absolutas, MUCHISMO, asi que a la hora de hacerlo portable
@@ -20,12 +27,28 @@ pero si utilizara rutas relativas desde otro lugar, daria error porque lo buscar
 esta este archivo
 """
 
+
+def validar_plataforma():
+	"""
+	funcion para formatear el sistema de comandos de la funcion system
+	para que funcione en windows o linux repectivamente
+	"""
+	sistema = []
+	if name == "posix":
+		print("Sistema Linux")
+		sistema.append("clear") # type: ignore
+	else:
+		print("Sistema Windows")
+		sistema.append("cls") # type: ignore
+	return "".join(sistema) # type: ignore
+
+
 def agregar_libros():
 	print("Cargando...")
 	time.sleep(2)
 	print("Listo!")
 	time.sleep(1)
-	system("clear")
+	system(validar_plataforma())
 	print("Ingresa lo solicitado a continuacion: (-1 para salir)")
 	print("=====================================================")
 	nombre_libro = pedir_dato("Título: ", validar_titulo)
@@ -44,12 +67,12 @@ def agregar_libros():
 	if fecha_libro is None:
 		return
 	print("=======================================")
-	if agl(nombre_libro, autor_libro, fecha_libro, genero_libro, editorial_libro) == "correcto":
+	if agl(nombre_libro, autor_libro, fecha_libro, genero_libro,creacion_isbn(), editorial_libro) == "correcto":
 		print("Todos los campos son correctos.")
 		return
 
 def registrar_usuario():
-	system("clear")
+	system(validar_plataforma())
 	print("Hola, Bienvenido!\nTe pediremos alguno datos personales para continuar.")
 	nombre = input("Nombre(s): ")
 	apellido = input("Apellido(s): ")
@@ -61,47 +84,49 @@ def registrar_usuario():
 		except:
 			print("Ingresa un numero")
 	userid = generar_id(nombre)
-	system("clear")
+	system(validar_plataforma())
 	inguser(userid, nombre, apellido, edad)
 	print(f"Hola {nombre}, tu id es {userid}\nCon este id puedes solicitar libros existentes en el sistema.")
 	time.sleep(5)
-	system("clear")
+	system(validar_plataforma())
 
 def prestamo_libro():
-	system("clear")
-	print("Es necesario estar Registrado Para Solicitar un libro,\nsi no lo estas, puedes registrarte en cualquier momento en el menu.")
+	system(validar_plataforma())
+	print("Para solicitar un libro, necesitas estar registrado,\nde lo contrario, puedes registrarte en cualquier momento en el menu.")
 	print("Opciones disponibles para solicitar un Libro:\n• 1) ID\n• 2) Nombre\n• 3) -DNI(decraped)")
 	try:
 		opcion_prestamo = int(input(" >> "))
 		if opcion_prestamo == 1:
-			print("Ingresa tu id:")
+			print("Ingresa tu ID:")
 			temporal_id = input(" >> ")
 			try:
 				if validadar_metodo(1, temporal_id) == "usuario existente":
-					system("clear")
+					system(validar_plataforma())
 					#  Segundo uso de la funcion  busqueda de libro
 					print("¿Como deseas buscar el libro?\n• 1) Autor\n• 2) Titulo\n• 3) Genero\n• 4) ISBN")
 					opcion = input(" >> ")
 					match opcion:
 						case '1':
-							system("clear")
+							system(validar_plataforma())
 							nl = input("Autor: ")
 							bl(1,nl)
 						case '2':
-							system("clear")
+							system(validar_plataforma())
 							nl = input("Titulo: ")
 							bl(2,nl)
 						case '3':
-							system("clear")
+							system(validar_plataforma())
 							nl = input("Genero: ")
 							if bl(3,nl) == "correcto":
 								print("culo")
 						case '4':	
-							system("clear")
+							system(validar_plataforma())
 							nl = input("ISBN: ")
 							bl(4,nl)
+						case _:
+							pass
 				else:
-					system("clear")
+					system(validar_plataforma())
 					print("El ID proporcionado no es correcto y/o no existe.")
 			except ValueError:
 				print("No se pudo registrar el prestamo")
@@ -115,10 +140,10 @@ def prestamo_libro():
 				if validadar_metodo(2, nombre, apellido) == "usuario existente":
 					print("¿Como deseas buscar el libro?\n1) Autor\n2) Titulo\n3) Genero\n4) ISBN")
 					opcion = input(" >> ")
-					match opcion:
+					match opcion: # type: ignore
 						case '1':
 							#  si es correcto, asumimos que el usuario existe y el libro tambien
-							system("clear")
+							system(validar_plataforma())
 							nl = input("Autor: ")
 							if bl(1,nl) == "correcto":
 								print("¿Quieres llevarte alguno de los libro mostrados? ")
@@ -130,7 +155,7 @@ def prestamo_libro():
 							else:
 								print("hay un error en la Funcion")
 						case '2':
-							system("clear")
+							system(validar_plataforma())
 							nl = input("Titulo: ")
 							if bl(2,nl) == "correcto":
 								print("¿Deseas llevarte alguno? ")
@@ -142,7 +167,7 @@ def prestamo_libro():
 							else:
 								print("Hay un error en la Funcion")
 						case '3':
-							system("clear")
+							system(validar_plataforma())
 							nl = input("Genero: ")
 							if bl(3,nl) == "correcto":
 								print("¿Te interesa algun libro de los mostrado? (si-no)")
@@ -157,16 +182,18 @@ def prestamo_libro():
 							else:
 								print("hay un error en la Funcion")
 						case '4':
-							system("clear")
+							system(validar_plataforma())
 							nl = input("ISBN: ")
 							bl(4,nl);
+						case _:
+							pass
 				else:
-					system("clear")
+					system(validar_plataforma())
 					print("El Usuario no existe y/o no esta registrado")
 			except ValueError as e:
 				print("No se pudo registrar el prestamo {}".format(e))
 	except ValueError:
-		system("clear")
+		system(validar_plataforma())
 		print("La opcion debe ser ingresada con un numero.")
 
 def mostrar_libros_disponibles():
@@ -174,12 +201,12 @@ def mostrar_libros_disponibles():
 
 def BusquedaDeLibro():
 	"""Buscar por nombre, autor y género"""
-	system("clear")
+	system(validar_plataforma())
 	print("Buscar Libro por\n• 1) Autor\n• 2) Titulo\n• 3) Genero\n• 4) ISBN\n• 5) ID")
 	try:
 		busqueda = int(input(" >> "))
 		if busqueda == 1:
-			system("clear")
+			system(validar_plataforma())
 			print("Ingresa el nombre del Autor:")
 			atg = input(" => ")
 			if bl(1,atg) == "correcto":
@@ -187,7 +214,7 @@ def BusquedaDeLibro():
 			else:
 				print(f"No existe un Autor con ese nombre {atg}.")
 		elif busqueda == 2:
-			system("clear")
+			system(validar_plataforma())
 			print("Titulo: ")
 			atg = input(" => ")
 			if bl(2,atg) == "correcto":
@@ -218,60 +245,68 @@ def BusquedaDeLibro():
 	except ValueError:
 		print("Hay un error")
 
-def admon():
-	print("Limpiando consola...")
-	time.sleep(2)
-	system("clear")
 
 print("Cargando...")
-print("Sistema operado por RoXxon\nTodos los derechos reservados(2025)")
+print("Sistema Creado Por LuisD3vv\n")
 time.sleep(3)
 print("Listo!")
 #   Interfaz base del codigo
 def main():
-	system("clear")
+	system(validar_plataforma())
 	while True: 
-		print("Welcome back to\nAutomated Library Service Management System = > [A.L.S.M.S]")
-		print("=============================")
-		print(
-			"Opciones Disponibles:\n• 1) Agregar un Libro 📚\n• 2) Registrar Usuario 🧑‍💻\n• 3) Solicitar Libro 🤲\n• 4) Libros Disponibles 📖\n• 5) Buscar Libro 🔍\n• 6) Salir🚪\n• 7) Limpiar Consola\n• 8) (NUEVO) Recetas -->")
-		print("Terminos y garantias Limitadas.\n===================================")
+		print(Back.BLACK + Fore.GREEN +"Automated Library Service Management System [A.L.S.M.S]")
+		#print(f"Ruta donde python busca los modulos {sys.path}")
+		print("=====================================================")
+		print(Fore.YELLOW +  "• 1)" + " - Agregar un Libro ", end=" ")
+		print(Fore.YELLOW +  "  • 2)" + " - Registrar Usuario ", end=" ")
+		print(Fore.YELLOW +  "• 3)" + " - Solicitar Libro \n")
+		print(Fore.YELLOW +  "• 4)" + " - Libros Disponibles ",end=" ")
+		print(Fore.YELLOW +  "• 5)" + " - Buscar Libro ", end=" ")
+		print(Fore.YELLOW +  "     • 6)" + " - Salir \n")
+		print(Fore.YELLOW +  "• 7)" + " - Limpiar Consola ", end=" ")
+		print(Fore.YELLOW +  "   • 8)" + " - Devolver Libro ", end=" ")
+		print(Fore.YELLOW +  "   • 9)" + " - ver Libros prestados \n")
+		print(Fore.RED +  "•" + " Terminos y garantias Limitadas")
 		while True:
 			try:
 				print("¿Que deseas realizar?")
 				opcion = input(">> ")
 				opcion = opcion.strip(" ")
+				print(f"Seleccionaste {opcion}")
 				if opcion == "nada" or opcion == "no":
 					print("Has salido.")
 					exit()
 			except ValueError as e:
-				system("clear")
-				print(f"Opcion incorrecta => {e}")
+				system(validar_plataforma())
+				print(Back.RED + Fore.WHITE +f"Opcion incorrecta => {e}")
 			except KeyboardInterrupt:
 				print("Saliendo...")
 				break
 			else:
 				break
-		match opcion:
-			case '1':
+		match opcion: # pyright: ignore[reportPossiblyUnboundVariable]
+			case '1' | 'agregar libro':
 				agregar_libros()
-			case '2':
+			case '2' | 'registrar usuario':
 				registrar_usuario()
-			case '3':
+			case '3'|'solicitar libro':
 				prestamo_libro()
-			case '4':
+			case '4' | 'libros disponibles':
 				mostrar_libros_disponibles()	
-			case '5':
+			case '5' | 'buscar libro':
 				BusquedaDeLibro()
-			case '6':
-				print(f"Hasta luego\nUltimo acceso => {fecha}")
-				print("Sistema operado bajo WesTek todos los derechos reservados")
+			case '6'|'salir':
+				print(f"Ultimo acceso => {fecha}")
 				time.sleep(2)
-				system("clear")
+				system(validar_plataforma())
 				break
-			case '7':
+			case '7' | 'limpiar consola':
 				admon()
+			case '8' | 'devolver libro':
+				devolver_libro()	
+			case '9' | 'ver libros prestados':
+				ver_prestamos()
 			case _:
-				print(f"Opcion fuera del rango '{opcion}'")
+				print(f"Opcion fuera del rango '{opcion}'") # type: ignore
 #  LLamar a la funcion principal
 main()

@@ -1,0 +1,63 @@
+Titulo Trinogometria| Autor Baldor | Genero Matematicas | Fecha 10-10-1990
+Titulo Algebra| Autor Baldor | Genero matematicas | Fecha 19-06-1941
+Titulo El diario de ana frank| Autor Ana frank | Genero bibliografia | Fecha 07-11-1945
+Titulo Harry potter| Autor JK Rowling | Genero ('ciencia ficcion',) | Fecha 10-01-1999
+Titulo Harry potter| Autor JK Rowling | Genero 978-902-818-790-7 | Fecha 10-01-1999
+Titulo Harry potter| Autor JK Rowling | Genero 978-712-725-618-1 | Fecha 10-01-1999
+Titulo Harry potter| Autor JK Rowling | Genero 978-973-561-292-5 | Fecha 10-01-1999
+Titulo Harry potter| Autor JK Rowling | Genero 978-438-288-242-5 | Fecha 10-01-1999
+Titulo Harry potter| Autor JK Rowling | Genero 978-907-91-432-2 | Fecha 10-01-1999
+Titulo Harry potter| Autor JK Rowling | Genero 978-55-849-501-2 | Fecha 10-01-1999
+Titulo Harry potter| Autor JK Rowling | Genero 978-161-338-256-4 | Fecha 10-01-1999
+Titulo Harry potter| Autor JK Rowling | Genero 978-887-72-320-5 | Fecha 10-01-1999
+Titulo Harry potter| Autor JK Rowling | Genero 978-271-939-243-9 | Fecha 10-01-1999
+Titulo Harry potter| Autor JK Rowling | Genero 978-935-320-222-1 | Fecha 10-01-1999
+Titulo Harry potter| Autor JK Rowling | Genero 978-960-582-358-8 | Fecha 10-01-1999
+Titulo Harry potter| Autor JK Rowling | Genero 978-78-674-451-4 | Fecha 10-01-1999
+Titulo Harry potter| Autor JK Rowling | Genero 978-297-710-554-2 | Fecha 10-01-1999
+Titulo Harry potter| Autor JK Rowling | Genero 978-191-850-48-6 | Fecha 10-01-1999
+Titulo Harry potter| Autor JK Rowling | Genero 978-407-152-868-9 | Fecha 10-01-1999
+Titulo Harry potter| Autor JK Rowling | Genero 978-526-820-373-9 | Fecha 10-01-1999
+Titulo Harry potter| Autor JK Rowling | Genero 978-632-805-451-8 | Fecha 10-01-1999
+Titulo Harry potter| Autor JK Rowling | Genero 978-149-660-594-9 | Fecha 10-01-1999
+Titulo Harry potter| Autor JK Rowling | Genero 978-155-753-894-4 | Fecha 10-01-1999
+Titulo Harry potter| Autor JK Rowling | Genero 978-727-552-990-9 | Fecha 10-01-1999
+Titulo Harry potter| Autor JK Rowling | Genero 978-259-935-670-8 | Fecha 10-01-1999
+Titulo Harry potter| Autor JK Rowling | Genero 978-38-284-373-1 | Fecha 10-01-1999
+Titulo Harry potter| Autor JK Rowling | Genero 978-791-603-673-8 | Fecha 10-01-1999
+Titulo Harry potter| Autor JK Rowling | Genero 978-317-197-502-4 | Fecha 10-01-1999
+Titulo Harry potter| Autor JK Rowling | Genero 978-952-892-609-4 | Fecha 10-01-1999
+Titulo Harry potter| Autor JK Rowling | Genero 978-624-117-596-9 | Fecha 10-01-1999
+Titulo Harry potter| Autor JK Rowling | Genero 978-438-911-721-4 | Fecha 10-01-1999
+Titulo Harry potter| Autor JK Rowling | Genero 978-187-690-833-9 | Fecha 10-01-1999
+Titulo Harry potter| Autor JK Rowling | Genero 978-673-254-780-3 | Fecha 10-01-1999
+Titulo Harry potter| Autor JK Rowling | Genero 978-449-769-911-3 | Fecha 10-01-1999
+Titulo Harry potter| Autor JK Rowling | Genero 978-578-760-50-2 | Fecha 10-01-1999
+Titulo Harry potter| Autor JK Rowling | Genero 978-950-809-339-4 | Fecha 10-01-1999
+Titulo Harry potter| Autor JK Rowling | Genero 978-133-517-300-5 | Fecha 10-01-1999
+Titulo Harry potter| Autor JK Rowling | Genero 978-837-598-398-10 | Fecha 10-01-1999
+Titulo Harry potter| Autor JK Rowling | Genero 978-773-597-325-2 | Fecha 10-01-1999
+Titulo Harry potter| Autor JK Rowling | Genero 978-644-236-187-9 | Fecha 10-01-1999
+Titulo Harry potter| Autor JK Rowling | Genero 978-759-749-621-10 | Fecha 10-01-1999
+Titulo Harry potter| Autor JK Rowling | Genero 978-695-610-12-0 | Fecha 10-01-1999
+Titulo Harry potter| Autor JK Rowling | Genero 978-312-213-317-0 | Fecha 10-01-1999
+Titulo Harry potter| Autor JK Rowling | Genero 978-378-516-601-2 | Fecha 10-01-1999
+Titulo Harry potter| Autor JK Rowling | Genero 978-637-790-257-7 | Fecha 10-01-1999
+Titulo Harry potter| Autor JK Rowling | Genero 978-92-273-889-2 | Fecha 10-01-1999
+Titulo Harry potter| Autor JK Rowling | Genero 978-124-241-953-0 | Fecha 10-01-1999
+Titulo Harry potter| Autor JK Rowling | Genero 978-197-582-955-6 | Fecha 10-01-1999
+Titulo Harry potter| Autor JK Rowling | Genero 978-120-155-874-9 | Fecha 10-01-1999
+Titulo Harry potter| Autor JK Rowling | Genero 978-410-925-165-7 | Fecha 10-01-1999
+Titulo Harry potter| Autor JK Rowling | Genero 978-815-744-664-0 | Fecha 10-01-1999
+Titulo Harry potter| Autor JK Rowling | Genero 978-8-308-322-5 | Fecha 10-01-1999
+Titulo Harry potter| Autor JK Rowling | Genero 978-273-160-565-9 | Fecha 10-01-1999
+Titulo Harry potter| Autor JK Rowling | Genero 978-653-825-808-3 | Fecha 10-01-1999
+Titulo Harry potter| Autor JK Rowling | Genero 978-403-41-343-0 | Fecha 10-01-1999
+Titulo Harry potter| Autor JK Rowling | Genero 978-588-498-800-1 | Fecha 10-01-1999
+Titulo Harry potter| Autor JK Rowling | Genero 978-196-883-269-6 | Fecha 10-01-1999
+Titulo Harry potter| Autor JK Rowling | Genero 978-366-215-671-4 | Fecha 10-01-1999
+Titulo Harry potter| Autor JK Rowling | Genero 978-489-635-25-10 | Fecha 10-01-1999
+Titulo Harry potter| Autor JK Rowling | Genero 978-903-544-699-8 | Fecha 10-01-1999
+Titulo Harry potter| Autor JK Rowling | Genero 978-230-540-794-8 | Fecha 10-01-1999
+Titulo Harry potter| Autor JK Rowling | Genero 978-827-342-327-10 | Fecha 10-01-1999
+Titulo La noche que devoro al mundo| Autor Sandra perrier | Genero terror | Fecha 31-10-1990

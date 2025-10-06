@@ -2,13 +2,33 @@ import time
 from utils import creacion_isbn
 from pathlib import Path
 import sqlite3
-from os import system
+from os import system,name
 from datetime import datetime
+from colorama import init, Fore,Back,Style
 
+# INICIAR COLORAMA
+init(autoreset=True)
 #  No usar mkdir cuando la ruta termine en un archivo, de lo contrario daria un error.
 #  Al utilizar Path se convierte en un objeto path
 rutaGen = Path("sql/GestorGeneral.db")
-ruta_escritura = Path("/home/lissandro/Escritorio/Gestor de Librerias/logs/log_libros.txt")
+ruta_escritura = Path("logs/log_libros.txt")
+
+
+def validar_plataforma():
+	"""
+	funcion para formatear el sistema de comandos de la funcion system
+	para que funcione en windows o linux repectivamente
+	"""
+	sistema = []
+	if name == "posix":
+		print("Sistema Linux")
+		sistema.append("clear")
+	else:
+		print("Sistema Windows")
+		sistema.append("cls")
+	return "".join(sistema)
+
+
 class Libro:
 	"""
 	Clase en la que definimos la estructura de cada libro
@@ -27,6 +47,7 @@ class Libro:
 	def __str__(self):
 		return f"Titulo: {self.titulo} | Autor: {self.autor} | Fecha: {self.detalles['fecha']} | ISBN: {self.detalles['isbn']} | Editorial: {self.detalles['editorial']}"
 
+
 	def ingresar_libro_DB(self,ruta):
 		"""
 		Ingresar datos a la base de datos en lugar de a un texto
@@ -43,7 +64,7 @@ class Libro:
 		except sqlite3.Error as error:
 			print(f"Ha ocurrido un error en alguna parte => {error}")
 	
-	#  Property es para obtener los datos almacenados en la variable y regresarlo de manera oculta, tambien es una forma diferente de la habitual al getter.
+	# Property es para obtener los datos almacenados en la variable y regresarlo de manera oculta, tambien es una forma diferente de la habitual al getter.
 	@property
 	def titulo(self):
 		return self._titulo
@@ -67,7 +88,7 @@ class Libro:
 			self._autor = autor_nuevo
 
 	@property
-	# Property nos ayuda convertir a fecha enm uina propiedad
+	# Property nos ayuda convertir a fecha en una propiedad
 	def fecha(self):
 		return self.detalles["fecha"]
 
@@ -80,15 +101,14 @@ class Libro:
 		else:
 			self.detalles["fecha"] = fecha_nueva
 
-def agregar_libro(titulo, autor, fecha, genero, editorial):
+def agregar_libro(titulo, autor, fecha, genero,isbn, editorial):
 	"""Comprobar las entradas del usuario y agregar correctamente el libro"""
 
 	titulo_libro = titulo
 	autor_libro = autor
-	gen_isb = creacion_isbn()
 	detalle = ({
 		"fecha": fecha,
-		"isbn": gen_isb,
+		"isbn": isbn,
 		"genero": genero,
 		"editorial": editorial
 	})
@@ -100,7 +120,7 @@ def agregar_libro(titulo, autor, fecha, genero, editorial):
 		objeto.ingresar_libro_DB(rutaGen)  # si el objeto se creo, se ingresa a la database
 		with open(ruta_escritura, "a") as lerbo:
 			try:
-				lerbo.writelines(str(objeto) + "\n")
+				lerbo.writelines(f"Titulo {titulo}| Autor {autor} | Genero {genero} | Fecha {fecha}\n")
 			except FileNotFoundError:
 				print(f"No se encontro el archivo final de la ruta {objeto}")
 			else:
@@ -110,20 +130,18 @@ def agregar_libro(titulo, autor, fecha, genero, editorial):
 
 def mostrar_libros():
 	try:
-		with sqlite3.connect(rutaGen) as conn:
+		with sqlite3.connect(rutaGen,timeout=30) as conn:
 			cur = conn.cursor()
-			cur.execute("SELECT Titulo, Autor, Genero, Fecha  FROM Libro")
-			conn.commit()
-			base = cur.fetchall() #  obtener todos los resultados
-			system("clear")
-			print("Libros disponibles:\n")
+			cur.execute("SELECT Libro.Autor, Libro.Titulo,Libro.Genero FROM Libro") 
+			base = cur.fetchall()
+			system(validar_plataforma())
+			print(Back.BLACK + Fore.RED + "Libros en el catalogo\n")
 			for libro in base:
-				(titulo, autor, genero ,fecha) = libro
-				print(f"Autor: {autor} | Titulo: {titulo} | Genero: {genero} | Fecha: {fecha}")
-				print("-" * (len(titulo)  + len(autor) + len(genero) + len(genero) * 2))
-			print("=============================")
+				(Autor,Titulo,Genero) = libro
+				print(Fore.BLUE + "[ - Autor: "+  f"{Fore.GREEN + Autor.strip()}" + Fore.BLUE + " - Titulo: " + f"{Fore.GREEN + Titulo.strip()}" + Fore.BLUE + " - Genero: " + f"{Fore.GREEN +  Genero.strip()} ]\n")
+			print(Fore.RED + "Antes de solicitar algun libro, verifique el estado de este en la seccion ver libros en prestamos\n")
 	except sqlite3.Error as error:
-		print("Ha ocurrido un error en alguna parte => ", error)
+		print("Ha ocurrido un error => ", error)
 
 def buscar_libro(opcion,param):
 	limpio = param.strip()
@@ -137,8 +155,8 @@ def buscar_libro(opcion,param):
 			res = cur.fetchone()
 			if res:
 				(_,Titulo,Autor,Fecha,Genero,_,_) = res
-				system("clear")
-				print(f"Libros disponibles del Autor(a) {Autor}:")
+				system(validar_plataforma())
+				print(f"Libros disponibles del Autor(a) {Autor}:\n")
 				print(f"TItulo: {Titulo} | Autor: {Autor} | Fecha de Lanzamiento: {Fecha} | Genero: {Genero}")
 				return "correcto"
 		elif opcion == 2:
@@ -158,7 +176,7 @@ def buscar_libro(opcion,param):
 				print(f"Libros disponibles del genero '{limpio}':\n")
 				for Genlibro in res:
 					(tit, aut) = Genlibro
-					print(f"Titulo: {tit} | Autor: {aut:<12}\n-------")
+					print(f"Titulo: {tit} | Autor: {aut:<12}\n-------") # aqui se utiliza el especificador de ancho de cadena :<n :>n :^n (alinear izquierda, derecha y centrar respectivamente)
 					
 				return "correcto"
 		elif opcion == 4:
@@ -166,8 +184,8 @@ def buscar_libro(opcion,param):
 			res = cur.fetchone()
 			if res:
 				(_,Titulo,Autor,Fecha,Genero,_,isbn) = res
-				system("clear")
-				print(f"Libro con el ISBN {limpio}:")
+				system(validar_plataforma())
+				print(f"Libro con el ISBN {limpio}:\n")
 				print(f"TItulo: {Titulo} | Autor: {Autor} | Fecha de Lanzamiento: {Fecha} | Genero: {Genero} | ISBN: {isbn}")
 				return "correcto"
 		elif opcion == 5:
@@ -175,14 +193,10 @@ def buscar_libro(opcion,param):
 			res = cur.fetchone()
 			if res:
 				(_,Titulo,Autor,Fecha,Genero,_,isbn) = res
-				system("clear")
-				print(f"Libro con el ID {limpio}:")
+				system(validar_plataforma())
+				print(f"Libro con el ID {limpio}:\n")
 				print(f"TItulo: {Titulo} | Autor: {Autor} | Fecha de Lanzamiento: {Fecha} | Genero: {Genero} | ISBN: {isbn}")
 				return "correcto"
 	except sqlite3.Error as e:
 		print(f"Ha ocurrido un error => {e}")
-# libro_nuevo = agregar_libro()
-# print("Libro nuevo creado")
-#
-# to dos_los_libros = []
-# to dos_los_libros.append(libro_nuevo)
+

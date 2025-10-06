@@ -1,7 +1,5 @@
-#  print(dia_hoy,mes_hoy,anio_hoy)
 from utils import malas_palabras
 from datetime import date
-
 fecha = date.today()
 #  Formatear la fecha dia,mes y anno  
 fecha_hoy = fecha.strftime("%d-%m-%Y")

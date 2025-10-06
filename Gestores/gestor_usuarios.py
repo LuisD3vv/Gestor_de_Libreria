@@ -2,7 +2,9 @@ import sqlite3
 from utils import generar_id
 from pathlib import Path
 import time
-from os import system
+from os import system,name
+
+
 ruta_usuario = Path("sql/GestorGeneral.db")
 if ruta_usuario.exists():
     print(f"Ruta OK...")
@@ -10,6 +12,23 @@ if ruta_usuario.exists():
     system("clear")
 else:
     print("No existe la ruta")
+rutalog = Path("logs/log_usuarios_id.txt")
+
+
+def validar_plataforma():
+	"""
+	funcion para formatear el sistema de comandos de la funcion system
+	para que funcione en windows o linux repectivamente
+	"""
+	sistema = []
+	if name == "posix":
+		print("Sistema Linux")
+		sistema.append("clear")
+	else:
+		print("Sistema Windows")
+		sistema.append("cls")
+	return "".join(sistema)
+
 
 class Usuario:
     """Clase para definir la estructura de cada usuario"""
@@ -19,29 +38,23 @@ class Usuario:
         self.edad = edad
         self.user_id = user_id
 
-    def mostrar_info_usuario(self):
-        ...
-
-    #  def __del__(self, nombre_eliminar):
-
-    def conocer_id(self, nombre_user, apellido_user):
-        ...
+    def __str__(self):
+        print(f"{self.nombre}{self.apellido}{self.edad}{self.user_id}")
 
     def ingresar_usuario_DB(self):
-        """
-        Funcion para manejar el ingreso de usuarios a una base de datos
-        utilizando el with para no tener que cerrar manualment
-        que eso normalmente cuausa errores si la apertura no
-        funciona
-        """
         try:
-            with sqlite3.connect(ruta_usuario) as conn:
+            print("Cargando base de datos...")
+            with sqlite3.connect(ruta_usuario, timeout=20,check_same_thread=False) as conn:
                 cur = conn.cursor()
                 cur.execute("CREATE TABLE IF NOT EXISTS Usuario(user_id,Nombre,Apellido,Edad)")
-                cur.execute("INSERT INTO Usuario(user_id,Nombre,Apellido,Edad) VALUES (?,?,?,?)", (self.user_id, self.nombre, self.apellido, self.edad))
+                cur.execute("INSERT INTO Usuario (user_id,Nombre,Apellido,Edad) VALUES (?,?,?,?)", (self.user_id, self.nombre, self.apellido, self.edad))
+                with open (rutalog,"a") as log:
+                    log.writelines(f"UserID {self.user_id} | UserName {self.nombre} | UserLastN {self.apellido} | UserAge {self.edad}")
                 conn.commit()
         except sqlite3.Error as error:
-            print("Ha ocurrido un error => ", error)
+            print(f"Ha ocurrido un error '{error}'")
+        except sqlite3.SQLITE_LOCKED as L:
+            print(f"La base de datos se protegio {L}")
 # Declarar variables para poder colocar rangos de edad.
 #  Getter
 @property
@@ -75,8 +88,7 @@ def edad(self, edad):
     if edad <= 0:
         raise ValueError("La edad debe ser mayor a 0")
     else:
-            self._edad = edad
-
+        self._edad = edad
 
 def ingresar_usuario(userid,nombre, apellido, edad):
     genericuser = Usuario(nombre, apellido, edad, userid)
@@ -88,13 +100,13 @@ def ingresar_usuario(userid,nombre, apellido, edad):
                 user_log.writelines(f"Nombre: {nombre} | Apellido: {apellido} | Edad: {edad} | ID: {userid}\n")
         except FileNotFoundError:
             print("Asegurate de que la ruta o el archivo existan.")
+    # Regresa una instancia de la clase Usuario
+    return genericuser
 
 def buscar_usuario():
     ...
 
-
 def listar_usuarios():
-
     ...
 
 #  Usar map() para mostrar títulos en mayúscula
